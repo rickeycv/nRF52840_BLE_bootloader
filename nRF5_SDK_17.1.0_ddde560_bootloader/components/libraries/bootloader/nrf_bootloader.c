@@ -302,7 +302,7 @@ static void loop_forever(void)
                   nrf_delay_ms(100);
                   int string_size = snprintf(data_tx, sizeof(data_tx), "AT\r");
                   is_response_ready = false;
-                  nrf_drv_uart_tx(&m_uart, data_tx, string_size);
+                  ret_code_t ret_code = nrf_drv_uart_tx(&m_uart, data_tx, string_size);
               }break;
               case GET_MAIN_FILE_SIZE:
               {
@@ -375,7 +375,7 @@ static void loop_forever(void)
             
                        // Put together read command plus length of data to read ("AT+QFREAD=2,{len_data_str}\r")
                        string_size = snprintf(data_tx, sizeof(data_tx), read_file_cmd, dat_file_handle, len_data_str);
-                       //set_frame_size(current_frame_size - (16 - string_size));
+                       
                        set_frame_size(HEADER_READ_SIZE + current_frame_size + size_len_str);
 
                        is_response_ready = false;
@@ -613,7 +613,7 @@ static void loop_forever(void)
 
         if (!NRF_LOG_PROCESS())
         {
-            wait_for_event();
+            //wait_for_event();
         }
     }
 }
@@ -866,13 +866,13 @@ ret_code_t nrf_bootloader_init(nrf_dfu_observer_t observer)
 
         case ACTIVATION_SUCCESS:
             // activation of the new FW is success, the bootloader needs to update main file
-            upgrade_status = UPGRADE_STATUS_COMPLETED;
-            state = INIT;
-            dfu_enter       = true;
-            break;
-            //bootloader_reset(true);
-            //NRF_LOG_ERROR("Unreachable");
-            //return NRF_ERROR_INTERNAL; // Should not reach this.
+            //upgrade_status = UPGRADE_STATUS_COMPLETED;
+            //state = INIT;
+            //dfu_enter       = true;
+            //break;
+            bootloader_reset(true);
+            NRF_LOG_ERROR("Unreachable");
+            return NRF_ERROR_INTERNAL; // Should not reach this.
 
         case ACTIVATION_ERROR:
         default:
