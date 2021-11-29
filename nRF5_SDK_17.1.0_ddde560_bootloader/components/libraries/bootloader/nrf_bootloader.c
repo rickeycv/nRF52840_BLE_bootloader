@@ -866,13 +866,13 @@ ret_code_t nrf_bootloader_init(nrf_dfu_observer_t observer)
 
         case ACTIVATION_SUCCESS:
             // activation of the new FW is success, the bootloader needs to update main file
-            //upgrade_status = UPGRADE_STATUS_COMPLETED;
-            //state = INIT;
-            //dfu_enter       = true;
-            //break;
-            bootloader_reset(true);
-            NRF_LOG_ERROR("Unreachable");
-            return NRF_ERROR_INTERNAL; // Should not reach this.
+            upgrade_status = UPGRADE_STATUS_COMPLETED;
+            state = INIT;
+            dfu_enter       = true;
+            break;
+            //bootloader_reset(true);
+            //NRF_LOG_ERROR("Unreachable");
+            //return NRF_ERROR_INTERNAL; // Should not reach this.
 
         case ACTIVATION_ERROR:
         default:

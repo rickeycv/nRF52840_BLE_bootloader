@@ -28,7 +28,7 @@
       linker_printf_width_precision_supported="Yes"
       linker_scanf_fmt_level="long"
       linker_section_placement_file="flash_placement.xml"
-      linker_section_placement_macros="FLASH_PH_START=0x0;FLASH_PH_SIZE=0x100000;RAM_PH_START=0x20000000;RAM_PH_SIZE=0x40000;FLASH_START=0xe0000;FLASH_SIZE=0x1e000;RAM_START=0x20005978;RAM_SIZE=0x3a688"
+      linker_section_placement_macros="FLASH_PH_START=0x0;FLASH_PH_SIZE=0x100000;RAM_PH_START=0x20000000;RAM_PH_SIZE=0x40000;FLASH_START=0xe0000;FLASH_SIZE=0x1e000;RAM_START=0x20008000;RAM_SIZE=0x3a688"
       linker_section_placements_segments="FLASH1 RX 0x0 0x100000;RAM1 RWX 0x20000000 0x40000;mbr_params_page RX 0x000FE000 0x1000;bootloader_settings_page RX 0x000FF000 0x1000;uicr_bootloader_start_address RX 0x10001014 0x4;uicr_mbr_params_page RX 0x10001018 0x4"
       macros="CMSIS_CONFIG_TOOL=../../../../../external_tools/cmsisconfig/CMSIS_Configuration_Wizard.jar"
       project_directory=""
@@ -37,6 +37,10 @@
       <file file_name="$(StudioDir)/source/thumb_crt0.s" />
     </folder>
     <folder Name="nRF_Log">
+      <file file_name="../../../../../components/libraries/log/src/nrf_log_backend_rtt.c" />
+      <file file_name="../../../../../components/libraries/log/src/nrf_log_backend_serial.c" />
+      <file file_name="../../../../../components/libraries/log/src/nrf_log_backend_uart.c" />
+      <file file_name="../../../../../components/libraries/log/src/nrf_log_default_backends.c" />
       <file file_name="../../../../../components/libraries/log/src/nrf_log_frontend.c" />
       <file file_name="../../../../../components/libraries/log/src/nrf_log_str_formatter.c" />
     </folder>
@@ -104,6 +108,11 @@
       <file file_name="../../main.c" />
       <file file_name="../config/sdk_config.h" />
     </folder>
+    <folder Name="nRF_Segger_RTT">
+      <file file_name="../../../../../external/segger_rtt/SEGGER_RTT.c" />
+      <file file_name="../../../../../external/segger_rtt/SEGGER_RTT_Syscalls_SES.c" />
+      <file file_name="../../../../../external/segger_rtt/SEGGER_RTT_printf.c" />
+    </folder>
     <folder Name="nRF_SVC">
       <file file_name="../../../../../components/libraries/bootloader/dfu/nrf_dfu_svci.c" />
       <file file_name="../../../../../components/libraries/bootloader/dfu/nrf_dfu_svci_handler.c" />
@@ -161,7 +170,7 @@
   <configuration
     Name="Release"
     c_preprocessor_definitions="NDEBUG"
-    c_user_include_directories="../../../../../components/libraries/slip;../../../../../integration/nrfx/legacy;../../../../../modules/nrfx/drivers/include;../../../../../modules/nrfx/hal;../../../../../modules/nrfx;../../../../../modules/nrfx/drivers/src;../../../../../components/softdevice/s140/headers"
+    c_user_include_directories="../../../../../components/libraries/slip;../../../../../integration/nrfx/legacy;../../../../../modules/nrfx/drivers/include;../../../../../modules/nrfx/hal;../../../../../modules/nrfx;../../../../../modules/nrfx/drivers/src;../../../../../components/softdevice/s140/headers;../../../../../external/segger_rtt"
     gcc_optimization_level="Level 2 for size"
     link_time_optimization="No" />
 </solution>

@@ -868,7 +868,7 @@ ret_code_t nrf_dfu_req_handler_init(nrf_dfu_observer_t observer)
     }
 
 #if defined(BLE_STACK_SUPPORT_REQD) || defined(ANT_STACK_SUPPORT_REQD)
-    ret_val  = nrf_dfu_flash_init(true);
+    ret_val  = nrf_dfu_flash_init(false);
 #else
     ret_val = nrf_dfu_flash_init(false);
 #endif
