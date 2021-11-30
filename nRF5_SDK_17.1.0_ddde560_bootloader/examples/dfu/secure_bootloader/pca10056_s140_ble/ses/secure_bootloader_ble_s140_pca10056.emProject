@@ -170,7 +170,10 @@
   <configuration
     Name="Release"
     c_preprocessor_definitions="NDEBUG"
-    c_user_include_directories="../../../../../components/libraries/slip;../../../../../integration/nrfx/legacy;../../../../../modules/nrfx/drivers/include;../../../../../modules/nrfx/hal;../../../../../modules/nrfx;../../../../../modules/nrfx/drivers/src;../../../../../components/softdevice/s140/headers;../../../../../external/segger_rtt"
+    c_user_include_directories=""
     gcc_optimization_level="Level 2 for size"
     link_time_optimization="No" />
+  <configuration
+    Name="Common"
+    c_user_include_directories="../../../../../components/libraries/slip;../../../../../integration/nrfx/legacy;../../../../../modules/nrfx/drivers/include;../../../../../modules/nrfx/hal;../../../../../modules/nrfx;../../../../../modules/nrfx/drivers/src;../../../../../components/softdevice/s140/headers;../../../../../external/segger_rtt." />
 </solution>

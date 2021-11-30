@@ -54,7 +54,7 @@ uint32_t nrf_dfu_transports_init(nrf_dfu_observer_t observer)
 
     NRF_LOG_DEBUG("Initializing transports (found: %d)", num_transports);
 
-    for (uint32_t i = 1; i < num_transports; i++)
+    for (uint32_t i = 0; i < num_transports; i++)
     {
         nrf_dfu_transport_t * const trans = DFU_TRANS_SECTION_ITEM_GET(i);
         ret_val = trans->init_func(observer);

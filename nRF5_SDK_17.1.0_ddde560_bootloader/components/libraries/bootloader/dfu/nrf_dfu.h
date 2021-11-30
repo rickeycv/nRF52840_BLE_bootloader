@@ -63,6 +63,12 @@ extern "C" {
 
 #define NRF_DFU_SCHED_EVENT_DATA_SIZE (sizeof(nrf_dfu_request_t))
 
+typedef enum
+{
+    DFU_UART_MODE,
+    DFU_BLE_MODE,
+} dfu_mode_t;
+
 
 /** @brief Function for initializing a DFU operation.
  *

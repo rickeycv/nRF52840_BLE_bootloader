@@ -194,7 +194,6 @@ void dfu_req_handler_rsp_clbk(nrf_dfu_response_t * p_res, void * p_context)
             if (   (p_transport->pkt_notif_target       == 0)
                 || (p_transport->pkt_notif_target_count != 0))
             {
-                //request_next_frame = true;
                 is_response_ready = true;
                 /* Do not reply to _OBJECT_WRITE messages. */
                 return;

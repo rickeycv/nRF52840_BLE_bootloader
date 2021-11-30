@@ -87,6 +87,7 @@ extern bool is_response_ready;
 extern uint8_t state;
 extern uint8_t fw_file_handle;
 extern uint8_t error_code;
+extern uint8_t dfu_mode;
 
 void remove_char(uint8_t *str, uint8_t c) 
 {
@@ -522,7 +523,7 @@ static void on_data_obj_write_request(nrf_dfu_request_t * p_req, nrf_dfu_respons
 
     ASSERT(p_req->callback.write);
 
-
+    NRF_LOG_INFO("writing flash......\n");
     ret_code_t ret =
         nrf_dfu_flash_store(write_addr, p_req->write.p_data, p_req->write.len, p_req->callback.write);
 
@@ -597,7 +598,10 @@ static void on_data_obj_execute_request_sched(void * p_evt, uint16_t event_lengt
         res.result = ext_err_code_handle(res.result);
 
         /* Provide response to transport */
-        //p_req->callback.response(&res, p_req->p_context);
+        if (dfu_mode == DFU_BLE_MODE)
+        {
+            p_req->callback.response(&res, p_req->p_context);
+        }
 
         ret = nrf_dfu_settings_write_and_backup((nrf_dfu_flash_callback_t)on_dfu_complete);
         UNUSED_RETURN_VALUE(ret);
@@ -868,7 +872,14 @@ ret_code_t nrf_dfu_req_handler_init(nrf_dfu_observer_t observer)
     }
 
 #if defined(BLE_STACK_SUPPORT_REQD) || defined(ANT_STACK_SUPPORT_REQD)
-    ret_val  = nrf_dfu_flash_init(false);
+    if (dfu_mode == DFU_BLE_MODE)
+    {
+        ret_val  = nrf_dfu_flash_init(true);
+    }
+    else
+    {
+        ret_val  = nrf_dfu_flash_init(false);
+    }
 #else
     ret_val = nrf_dfu_flash_init(false);
 #endif

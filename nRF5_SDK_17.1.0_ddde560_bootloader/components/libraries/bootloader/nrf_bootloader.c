@@ -78,7 +78,8 @@ uint32_t start_of_data;
 uint8_t len_data_str[5]; //up to 9999
 uint32_t current_frame_size;
 uint8_t state = INIT;
-bool is_response_ready = true;
+bool is_response_ready = false;
+uint8_t dfu_mode = DFU_BLE_MODE;
 
 uint8_t main_file_handle = 0;
 uint8_t dat_file_handle = 0;
@@ -866,14 +867,20 @@ ret_code_t nrf_bootloader_init(nrf_dfu_observer_t observer)
 
         case ACTIVATION_SUCCESS:
             // activation of the new FW is success, the bootloader needs to update main file
-            upgrade_status = UPGRADE_STATUS_COMPLETED;
-            state = INIT;
-            dfu_enter       = true;
-            break;
-            //bootloader_reset(true);
-            //NRF_LOG_ERROR("Unreachable");
-            //return NRF_ERROR_INTERNAL; // Should not reach this.
-
+            if (dfu_mode == DFU_UART_MODE)
+            {
+                upgrade_status = UPGRADE_STATUS_COMPLETED;
+                state = INIT;
+                dfu_enter       = true;
+                break;
+            }
+            else
+            {
+                bootloader_reset(true);
+                NRF_LOG_ERROR("Unreachable");
+                return NRF_ERROR_INTERNAL; // Should not reach this.
+            }
+            
         case ACTIVATION_ERROR:
         default:
             return NRF_ERROR_INTERNAL;
@@ -899,26 +906,6 @@ ret_code_t nrf_bootloader_init(nrf_dfu_observer_t observer)
         {
             return NRF_ERROR_INTERNAL;
         }
-
-        //nrf_dfu_validation_init_cmd_create(0x94);
-
-        //uint32_t data_length = 20;
-
-        //uint8_t data[10];
-
-        //nrf_dfu_bank1_start_addr();
-        //force_init_valid();
-
-        //set_app_address_and_size(0x1000);
-
-        //nrf_dfu_validation_init_cmd_append(data, data_length);
-
-        //nrf_dfu_validation_init();
-        
-        //snprintf(&data_tx[12], 5, "%d\r", FRAME_SIZE);
-        //nrf_drv_uart_tx(&m_uart, data_tx, sizeof(data_tx) - 1);
-
-        //request_next_frame = true;
 
         NRF_LOG_DEBUG("Enter main loop");
         loop_forever(); // This function will never return.

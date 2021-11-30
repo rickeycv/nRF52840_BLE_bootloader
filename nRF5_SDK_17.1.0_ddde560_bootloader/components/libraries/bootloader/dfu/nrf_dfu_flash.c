@@ -45,7 +45,7 @@
 #include "nrf_fstorage_sd.h"
 #include "nrf_fstorage_nvmc.h"
 
-
+extern bool is_response_ready;
 #define NRF_LOG_MODULE_NAME nrf_dfu_flash
 #include "nrf_log.h"
 NRF_LOG_MODULE_REGISTER();
@@ -72,7 +72,7 @@ void dfu_fstorage_evt_handler(nrf_fstorage_evt_t * p_evt)
 
     if (p_evt->result == NRF_SUCCESS)
     {
-        NRF_LOG_DEBUG("Flash %s success: addr=%p, pending %d",
+        NRF_LOG_DEBUG("Flash %s success----: addr=%p, pending %d",
                       (p_evt->id == NRF_FSTORAGE_EVT_WRITE_RESULT) ? "write" : "erase",
                       p_evt->addr, m_flash_operations_pending);
     }
