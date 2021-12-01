@@ -78,8 +78,8 @@ uint32_t start_of_data;
 uint8_t len_data_str[5]; //up to 9999
 uint32_t current_frame_size;
 uint8_t state = INIT;
-bool is_response_ready = false;
-uint8_t dfu_mode = DFU_BLE_MODE;
+bool is_response_ready = true;
+uint8_t dfu_mode = DFU_UART_MODE;
 
 uint8_t main_file_handle = 0;
 uint8_t dat_file_handle = 0;
@@ -199,26 +199,34 @@ static void inactivity_timeout(void)
 {
     NRF_LOG_INFO("Inactivity timeout.");
 
-
-    nrf_bootloader_dfu_inactivity_timer_restart(
-                        NRF_BOOTLOADER_MS_TO_TICKS(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS),
-                        inactivity_timeout);
-
-    comm_retries++;
-
-    if (comm_retries > MAX_COMM_RETRIES)
+    if (dfu_mode == DFU_UART_MODE)
     {
-        //TODO: Launch BLE DFU because something is happening with BG77 comm
+        nrf_bootloader_dfu_inactivity_timer_restart(
+                            NRF_BOOTLOADER_MS_TO_TICKS(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS),
+                            inactivity_timeout);
+
+        comm_retries++;
+
+        if (comm_retries > MAX_COMM_RETRIES)
+        {
+            //TODO: Launch BLE DFU because something is happening with BG77 comm
+            s_dfu_settings.dfu_mode = 0xc2;
+            nrf_dfu_settings_write_and_backup(NULL);
+            bootloader_reset(false);
+        }
+        else
+        {
+            nrf_bootloader_dfu_inactivity_timer_restart(
+                            NRF_BOOTLOADER_MS_TO_TICKS(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS),
+                            inactivity_timeout);
+            state = RESET_MODEM;
+            is_response_ready = true;
+        }
     }
     else
     {
-        nrf_bootloader_dfu_inactivity_timer_restart(
-                        NRF_BOOTLOADER_MS_TO_TICKS(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS),
-                        inactivity_timeout);
-        state = RESET_MODEM;
-        is_response_ready = true;
+        bootloader_reset(true);
     }
-    //bootloader_reset(true);
 }
 
 
@@ -592,6 +600,8 @@ static void loop_forever(void)
                   //TODO: something went wrong, launch BLE DFU or main app if any
                   if (upgrade_status == UPGRADE_STATUS_ERROR)
                   {
+                      s_dfu_settings.dfu_mode = 0xc2;
+                      nrf_dfu_settings_write_and_backup(NULL);
                       bootloader_reset(false);
                   }
                   else if (upgrade_status == UPGRADE_STATUS_SUCCESS)
@@ -614,7 +624,7 @@ static void loop_forever(void)
 
         if (!NRF_LOG_PROCESS())
         {
-            //wait_for_event();
+            wait_for_event();
         }
     }
 }
@@ -842,6 +852,14 @@ ret_code_t nrf_bootloader_init(nrf_dfu_observer_t observer)
         return NRF_ERROR_INTERNAL;
     }
 
+    if (s_dfu_settings.dfu_mode == 0xc2)
+    {
+        is_response_ready = false;
+        dfu_mode = DFU_BLE_MODE;
+        // Original BL tiemout is 120 s (5*24 = 120)
+        initial_timeout *= 24; 
+    }
+
     #if NRF_BL_DFU_ALLOW_UPDATE_FROM_APP
     // Postvalidate if DFU has signaled that update is ready.
     if (s_dfu_settings.bank_current == NRF_DFU_CURRENT_BANK_1)
@@ -901,6 +919,7 @@ ret_code_t nrf_bootloader_init(nrf_dfu_observer_t observer)
 
         nrf_bootloader_dfu_inactivity_timer_restart(initial_timeout, inactivity_timeout);
 
+        
         ret_val = nrf_dfu_init(dfu_observer);
         if (ret_val != NRF_SUCCESS)
         {

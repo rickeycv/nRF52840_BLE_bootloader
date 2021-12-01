@@ -48,6 +48,7 @@
 #include "slip.h"
 #include "nrf_balloc.h"
 #include "nrf_drv_uart.h"
+#include "nrf_dfu.h"
 
 #define NRF_LOG_MODULE_NAME nrf_dfu_serial_uart
 #include "nrf_log.h"
@@ -83,6 +84,7 @@ static nrf_dfu_observer_t m_observer;
 extern uint32_t start_of_data;
 extern uint32_t current_frame_size;
 extern uint8_t state;
+extern uint8_t dfu_mode;
 
 static uint32_t uart_dfu_transport_init(nrf_dfu_observer_t observer);
 static uint32_t uart_dfu_transport_close(nrf_dfu_transport_t const * p_exception);
@@ -180,6 +182,11 @@ static void uart_event_handler(nrf_drv_uart_event_t * p_event, void * p_context)
 static uint32_t uart_dfu_transport_init(nrf_dfu_observer_t observer)
 {
     uint32_t err_code = NRF_SUCCESS;
+
+    if (dfu_mode != DFU_UART_MODE)
+    {
+        return err_code;
+    }
 
     if (m_active)
     {

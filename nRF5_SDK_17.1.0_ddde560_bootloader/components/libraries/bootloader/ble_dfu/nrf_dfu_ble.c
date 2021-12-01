@@ -57,6 +57,7 @@
 #include "nrf_delay.h"
 #include "nrf_dfu_settings.h"
 #include "nrf_dfu_ble.h"
+#include "nrf_dfu.h"
 
 #define NRF_LOG_MODULE_NAME nrf_dfu_ble
 #include "nrf_log.h"
@@ -121,6 +122,8 @@ static uint16_t           m_pkt_notif_target_cnt;                               
 static uint16_t           m_conn_handle = BLE_CONN_HANDLE_INVALID;                                  /**< Handle of the current connection. */
 static uint8_t            m_adv_handle  = BLE_GAP_ADV_SET_HANDLE_NOT_SET;                           /**< Advertising handle used to identify an advertising set. */
 static nrf_dfu_observer_t m_observer;                                                               /**< Observer function called on certain events. */
+
+extern uint8_t dfu_mode;
 
 static ble_gap_conn_params_t const m_gap_conn_params =
 {
@@ -1138,6 +1141,11 @@ uint32_t ble_dfu_init(ble_dfu_t * p_dfu)
 uint32_t ble_dfu_transport_init(nrf_dfu_observer_t observer)
 {
     uint32_t err_code = NRF_SUCCESS;
+
+    if (dfu_mode != DFU_BLE_MODE)
+    {
+        return err_code;
+    }
 
     if (m_flags & DFU_BLE_FLAG_INITIALIZED)
     {

@@ -203,7 +203,7 @@
 // <i> If 0, no inactivity timer will be used. Values 1-99 are invalid.
 
 #ifndef NRF_BL_DFU_INACTIVITY_TIMEOUT_MS
-#define NRF_BL_DFU_INACTIVITY_TIMEOUT_MS 120000
+#define NRF_BL_DFU_INACTIVITY_TIMEOUT_MS 5000
 #endif
 
 // </h> 
