@@ -66,6 +66,9 @@ extern uint8_t old_fw_file_name[32];
 extern uint8_t current_fw_file_name[32];
 extern uint8_t main_file_data[128];
 extern uint8_t upgrade_retries;
+extern bool is_fw_file_open;
+extern bool is_dat_file_open;
+extern bool is_main_file_open;
 
 uint8_t* p_str;
 uint8_t* tokens[4];
@@ -643,6 +646,7 @@ void nrf_dfu_serial_on_packet_received(nrf_dfu_serial_t       * p_transport,
             p_str = strstr(p_payload,"OK");
             if(p_str != NULL)
             {
+                is_main_file_open = false;
                 state = CLOSE_DAT_FILE;
             }
             else
@@ -661,6 +665,7 @@ void nrf_dfu_serial_on_packet_received(nrf_dfu_serial_t       * p_transport,
             p_str = strstr(p_payload,"OK");
             if(p_str != NULL)
             {
+                is_dat_file_open = false;
                 state = CLOSE_FW_FILE;
             }
             else
@@ -679,6 +684,7 @@ void nrf_dfu_serial_on_packet_received(nrf_dfu_serial_t       * p_transport,
             p_str = strstr(p_payload,"OK");
             if(p_str != NULL)
             {
+                is_fw_file_open = false;
                 state = START_APP;
             }
             else

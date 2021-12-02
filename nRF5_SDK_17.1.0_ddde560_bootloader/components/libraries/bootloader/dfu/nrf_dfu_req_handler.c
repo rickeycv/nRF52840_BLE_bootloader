@@ -603,6 +603,12 @@ static void on_data_obj_execute_request_sched(void * p_evt, uint16_t event_lengt
             p_req->callback.response(&res, p_req->p_context);
         }
 
+        if (res.result != NRF_DFU_RES_CODE_SUCCESS)
+        {
+            //some validation went wrong, return and substract one retry
+            return;
+        }
+
         ret = nrf_dfu_settings_write_and_backup((nrf_dfu_flash_callback_t)on_dfu_complete);
         UNUSED_RETURN_VALUE(ret);
     }
@@ -649,6 +655,12 @@ bool on_data_obj_execute_request(nrf_dfu_request_t * p_req, nrf_dfu_response_t *
     s_dfu_settings.progress.firmware_image_offset_last = s_dfu_settings.progress.firmware_image_offset;
 
     on_data_obj_execute_request_sched(p_req, 0);
+
+    if (s_dfu_settings.bank_1.bank_code == 0)
+    {
+        // bank not valid, something went wrong
+        return true;
+    }
 
     m_observer(NRF_DFU_EVT_OBJECT_RECEIVED);
 
@@ -909,9 +921,9 @@ ret_code_t nrf_dfu_req_handler_init(nrf_dfu_observer_t observer)
     return NRF_SUCCESS;
 }
 
-void seft_init(void)
+void self_init(void)
 {
-    force_init_valid();
+    force_op_data =  false;
 }
 
 ret_code_t set_start_address_and_erase_memory(void)

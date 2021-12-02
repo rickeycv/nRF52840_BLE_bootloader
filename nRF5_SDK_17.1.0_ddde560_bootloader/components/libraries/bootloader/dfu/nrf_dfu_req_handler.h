@@ -344,7 +344,7 @@ ANON_UNIONS_DISABLE;
 
 void remove_char(uint8_t *str, uint8_t c);
 
-void seft_init(void);
+void self_init(void);
 
 ret_code_t set_start_address_and_erase_memory(void);
 

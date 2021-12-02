@@ -302,14 +302,21 @@ static void loop_forever(void)
           {
               case RESET_MODEM:
               {
-                  int string_size = snprintf(data_tx, sizeof(data_tx), "AT+CFUN=1,1\r");
+                  nrf_bootloader_dfu_inactivity_timer_restart(
+                            NRF_BOOTLOADER_MS_TO_TICKS(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS),
+                            inactivity_timeout);
+                  string_size = snprintf(data_tx, sizeof(data_tx), "AT+CFUN=1,1\r");
                   is_response_ready = false;
                   nrf_drv_uart_tx(&m_uart, data_tx, string_size);
               }break;
               case INIT:
               {
+                  nrf_bootloader_dfu_inactivity_timer_restart(
+                            NRF_BOOTLOADER_MS_TO_TICKS(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS),
+                            inactivity_timeout);
+                  self_init();
                   nrf_delay_ms(100);
-                  int string_size = snprintf(data_tx, sizeof(data_tx), "AT\r");
+                  string_size = snprintf(data_tx, sizeof(data_tx), "AT\r");
                   is_response_ready = false;
                   ret_code_t ret_code = nrf_drv_uart_tx(&m_uart, data_tx, string_size);
               }break;
@@ -343,6 +350,11 @@ static void loop_forever(void)
               }break;
               case GET_DAT_FILE_SIZE:
               {
+                  //TODO: remove this is stament, it is only for debug
+                  if (s_dfu_settings.progress.command_offset != 0)
+                  {
+                      s_dfu_settings.progress.command_offset = 0;
+                  }
                   if (upgrade_status == UPGRADE_STATUS_PENDING)
                   {
                       if (new_fw_file_name[0] != NULL)
@@ -533,7 +545,14 @@ static void loop_forever(void)
                   {
                       upgrade_status = UPGRADE_STATUS_ERROR;
                       //Prepare FOTA.txt file and write failed on status
-                      state = WRITE_UPGRADE_STATUS_SET_POINTER;
+                      if (is_main_file_open)
+                      {
+                          state = WRITE_UPGRADE_STATUS_SET_POINTER;
+                      }
+                      else
+                      {
+                          state = GET_MAIN_FILE_SIZE;
+                      }
                   }
                   else
                   {
@@ -609,7 +628,12 @@ static void loop_forever(void)
                       uint8_t* dummy;
                       dfu_init_command_t p_init;
                       p_init.type = DFU_FW_TYPE_APPLICATION;
-                      on_data_obj_execute_request((nrf_dfu_request_t*)&dummy, (nrf_dfu_response_t*)&dummy);
+                      if (on_data_obj_execute_request((nrf_dfu_request_t*)&dummy, (nrf_dfu_response_t*)&dummy))
+                      {
+                          // we should not get here, something went wrong
+                          state = UPGRADE_FAILED;
+                          upgrade_status = UPGRADE_STATUS_PENDING;
+                      }
                       
                   }
                   else // upgrade_status == UPGRADE_STATUS_COMPLETED
@@ -855,9 +879,7 @@ ret_code_t nrf_bootloader_init(nrf_dfu_observer_t observer)
     if (s_dfu_settings.dfu_mode == 0xc2)
     {
         is_response_ready = false;
-        dfu_mode = DFU_BLE_MODE;
-        // Original BL tiemout is 120 s (5*24 = 120)
-        initial_timeout *= 24; 
+        dfu_mode = DFU_BLE_MODE;  
     }
 
     #if NRF_BL_DFU_ALLOW_UPDATE_FROM_APP
@@ -902,6 +924,12 @@ ret_code_t nrf_bootloader_init(nrf_dfu_observer_t observer)
         case ACTIVATION_ERROR:
         default:
             return NRF_ERROR_INTERNAL;
+    }
+
+    if (dfu_mode == DFU_BLE_MODE)
+    {
+        // Original BL tiemout is 120 s (5*24 = 120)
+        initial_timeout *= 24; 
     }
 
     if (dfu_enter)
