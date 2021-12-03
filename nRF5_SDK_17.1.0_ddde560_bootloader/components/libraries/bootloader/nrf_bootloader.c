@@ -211,6 +211,7 @@ static void inactivity_timeout(void)
         {
             //TODO: Launch BLE DFU because something is happening with BG77 comm
             s_dfu_settings.dfu_mode = 0xc2;
+            s_dfu_settings.enter_buttonless_dfu = 1;
             nrf_dfu_settings_write_and_backup(NULL);
             bootloader_reset(false);
         }
@@ -543,6 +544,7 @@ static void loop_forever(void)
 
                   if (num_retries >= upgrade_retries)
                   {
+                      NRF_LOG_WARNING("Upgrade retries limit reached\n")
                       upgrade_status = UPGRADE_STATUS_ERROR;
                       //Prepare FOTA.txt file and write failed on status
                       if (is_main_file_open)
@@ -620,8 +622,9 @@ static void loop_forever(void)
                   if (upgrade_status == UPGRADE_STATUS_ERROR)
                   {
                       s_dfu_settings.dfu_mode = 0xc2;
-                      nrf_dfu_settings_write_and_backup(NULL);
-                      bootloader_reset(false);
+                      s_dfu_settings.enter_buttonless_dfu = 1;
+                      nrf_dfu_settings_write_and_backup(do_reset);
+                      //bootloader_reset(false);
                   }
                   else if (upgrade_status == UPGRADE_STATUS_SUCCESS)
                   {           
@@ -633,6 +636,9 @@ static void loop_forever(void)
                           // we should not get here, something went wrong
                           state = UPGRADE_FAILED;
                           upgrade_status = UPGRADE_STATUS_PENDING;
+                          nrf_bootloader_dfu_inactivity_timer_restart(
+                                    NRF_BOOTLOADER_MS_TO_TICKS(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS),
+                                    inactivity_timeout);
                       }
                       
                   }
@@ -740,6 +746,14 @@ static bool app_is_valid(bool do_crc)
     // The bootloader itself is not checked, since a self-check of this kind gives little to no benefit
     // compared to the cost incurred on each bootup.
 
+    // if the app was upgraded via BLE return to default (UART)
+    if (dfu_mode == DFU_BLE_MODE)
+    {
+        s_dfu_settings.dfu_mode = 0x2c;
+        // Clear DFU flag in flash settings.
+        s_dfu_settings.enter_buttonless_dfu = 0;
+        nrf_dfu_settings_write_and_backup(NULL);
+    }
     NRF_LOG_DEBUG("App is valid");
     return true;
 }
