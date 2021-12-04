@@ -746,14 +746,6 @@ static bool app_is_valid(bool do_crc)
     // The bootloader itself is not checked, since a self-check of this kind gives little to no benefit
     // compared to the cost incurred on each bootup.
 
-    // if the app was upgraded via BLE return to default (UART)
-    if (dfu_mode == DFU_BLE_MODE)
-    {
-        s_dfu_settings.dfu_mode = 0x2c;
-        // Clear DFU flag in flash settings.
-        s_dfu_settings.enter_buttonless_dfu = 0;
-        nrf_dfu_settings_write_and_backup(NULL);
-    }
     NRF_LOG_DEBUG("App is valid");
     return true;
 }
@@ -930,6 +922,14 @@ ret_code_t nrf_bootloader_init(nrf_dfu_observer_t observer)
             }
             else
             {
+                // if the app was upgraded via BLE return to default (UART)
+                if (dfu_mode == DFU_BLE_MODE)
+                {
+                    s_dfu_settings.dfu_mode = 0x2c;
+                    // Clear DFU flag in flash settings.
+                    s_dfu_settings.enter_buttonless_dfu = 0;
+                    nrf_dfu_settings_write_and_backup(NULL);
+                }
                 bootloader_reset(true);
                 NRF_LOG_ERROR("Unreachable");
                 return NRF_ERROR_INTERNAL; // Should not reach this.
