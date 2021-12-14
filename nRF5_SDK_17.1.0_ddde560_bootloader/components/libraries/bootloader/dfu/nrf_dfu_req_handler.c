@@ -513,8 +513,6 @@ static void on_data_obj_write_request(nrf_dfu_request_t * p_req, nrf_dfu_respons
 
     uint32_t const write_addr = m_firmware_start_addr + s_dfu_settings.write_offset;
 
-    //memcpy(p_req->write.p_data, &p_req->write.p_data[14], 128);
-
     /* CRC must be calculated before handing off the data to fstorage because the data is
      * freed on write completion.
      */

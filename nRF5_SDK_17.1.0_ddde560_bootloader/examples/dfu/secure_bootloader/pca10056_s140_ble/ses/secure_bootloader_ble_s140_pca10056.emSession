@@ -2,16 +2,16 @@
 <session>
  <Bookmarks/>
  <Breakpoints groups="Breakpoints" active_group="Breakpoints">
-  <BreakpointListItem trigger="" line="187" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="3" filename="../../../../../components/libraries/bootloader/nrf_bootloader.c" useHWbreakpoint="false"/>
-  <BreakpointListItem trigger="" line="225" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="3" filename="../../../../../components/libraries/bootloader/nrf_bootloader.c" useHWbreakpoint="false"/>
-  <BreakpointListItem trigger="" line="250" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="3" filename="../../../../../components/libraries/bootloader/nrf_bootloader.c" useHWbreakpoint="false"/>
-  <BreakpointListItem trigger="" line="361" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="3" filename="../../../../../components/libraries/bootloader/nrf_bootloader.c" useHWbreakpoint="false"/>
-  <BreakpointListItem trigger="" line="366" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="3" filename="../../../../../components/libraries/bootloader/nrf_bootloader.c" useHWbreakpoint="false"/>
-  <BreakpointListItem trigger="" line="391" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="3" filename="../../../../../components/libraries/bootloader/nrf_bootloader.c" useHWbreakpoint="false"/>
-  <BreakpointListItem trigger="" line="528" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="3" filename="../../../../../components/libraries/bootloader/nrf_bootloader.c" useHWbreakpoint="false"/>
-  <BreakpointListItem trigger="" line="531" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="2" filename="../../../../../components/libraries/bootloader/nrf_bootloader.c" useHWbreakpoint="false"/>
-  <BreakpointListItem trigger="" line="552" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="3" filename="../../../../../components/libraries/bootloader/nrf_bootloader.c" useHWbreakpoint="false"/>
-  <BreakpointListItem trigger="" line="601" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="3" filename="../../../../../components/libraries/bootloader/nrf_bootloader.c" useHWbreakpoint="false"/>
+  <BreakpointListItem trigger="" line="178" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="3" filename="../../../../../components/libraries/bootloader/nrf_bootloader.c" useHWbreakpoint="false"/>
+  <BreakpointListItem trigger="" line="224" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="3" filename="../../../../../components/libraries/bootloader/nrf_bootloader.c" useHWbreakpoint="false"/>
+  <BreakpointListItem trigger="" line="249" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="3" filename="../../../../../components/libraries/bootloader/nrf_bootloader.c" useHWbreakpoint="false"/>
+  <BreakpointListItem trigger="" line="360" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="3" filename="../../../../../components/libraries/bootloader/nrf_bootloader.c" useHWbreakpoint="false"/>
+  <BreakpointListItem trigger="" line="365" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="3" filename="../../../../../components/libraries/bootloader/nrf_bootloader.c" useHWbreakpoint="false"/>
+  <BreakpointListItem trigger="" line="390" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="3" filename="../../../../../components/libraries/bootloader/nrf_bootloader.c" useHWbreakpoint="false"/>
+  <BreakpointListItem trigger="" line="527" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="3" filename="../../../../../components/libraries/bootloader/nrf_bootloader.c" useHWbreakpoint="false"/>
+  <BreakpointListItem trigger="" line="530" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="2" filename="../../../../../components/libraries/bootloader/nrf_bootloader.c" useHWbreakpoint="false"/>
+  <BreakpointListItem trigger="" line="551" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="3" filename="../../../../../components/libraries/bootloader/nrf_bootloader.c" useHWbreakpoint="false"/>
+  <BreakpointListItem trigger="" line="600" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="3" filename="../../../../../components/libraries/bootloader/nrf_bootloader.c" useHWbreakpoint="false"/>
   <BreakpointListItem trigger="" line="406" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="3" filename="../../../../../components/libraries/bootloader/nrf_bootloader_fw_activation.c" useHWbreakpoint="false"/>
   <BreakpointListItem trigger="" line="445" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="3" filename="../../../../../components/libraries/bootloader/dfu/nrf_dfu_req_handler.c" useHWbreakpoint="false"/>
   <BreakpointListItem trigger="" line="648" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="3" filename="../../../../../components/libraries/bootloader/dfu/nrf_dfu_req_handler.c" useHWbreakpoint="false"/>
@@ -43,21 +43,21 @@
  <Project>
   <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056"/>
   <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056"/>
-  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;Segger Startup Files"/>
-  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;nRF_SVC"/>
-  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;nRF_SoftDevice"/>
-  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;nRF_Serial_DFU"/>
-  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;nRF_Log"/>
-  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;nRF_Libraries"/>
-  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;nRF_Drivers"/>
-  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;nRF_DFU"/>
-  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;nRF_Crypto backend CC310_BL"/>
-  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;nRF_Bootloader"/>
-  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;nRF_BLE"/>
-  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;None"/>
-  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;nano-pb"/>
-  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;Board Definition"/>
   <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;Application"/>
+  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;Board Definition"/>
+  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;nano-pb"/>
+  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;None"/>
+  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;nRF_BLE"/>
+  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;nRF_Bootloader"/>
+  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;nRF_Crypto backend CC310_BL"/>
+  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;nRF_DFU"/>
+  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;nRF_Drivers"/>
+  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;nRF_Libraries"/>
+  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;nRF_Log"/>
+  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;nRF_Serial_DFU"/>
+  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;nRF_SoftDevice"/>
+  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;nRF_SVC"/>
+  <ProjectSessionItem path="secure_bootloader_ble_s140_pca10056;secure_bootloader_ble_s140_pca10056;Segger Startup Files"/>
  </Project>
  <Register1>
   <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/MSP;CPU/PSP;CPU/PRIMASK;CPU/BASEPRI;CPU/FAULTMASK;CPU/CONTROL;CPU/internal" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context" name="secure_bootloader_ble_s140_pca10056" decimalNodes="" octalNodes="" unsignedNodes=""/>
@@ -80,12 +80,12 @@
  <Watch1>
   <Watches active="1" update="Never">
    <Watchpoint expression="p_instance" name="p_instance" radix="-1" linenumber="357" filename="../../../../../modules/nrfx/drivers/src/nrfx_uarte.c"/>
-   <Watchpoint expression="p_payload" name="p_payload" radix="-1" linenumber="449" filename="../../../../../components/libraries/bootloader/serial_dfu/nrf_dfu_serial.c"/>
-   <Watchpoint expression="s_dfu_settings" name="s_dfu_settings" radix="-1" linenumber="454" filename="../../../../../components/libraries/bootloader/nrf_bootloader.c"/>
+   <Watchpoint expression="p_payload" name="p_payload" radix="-1" linenumber="448" filename="../../../../../components/libraries/bootloader/serial_dfu/nrf_dfu_serial.c"/>
+   <Watchpoint expression="s_dfu_settings" name="s_dfu_settings" radix="-1" linenumber="453" filename="../../../../../components/libraries/bootloader/nrf_bootloader.c"/>
    <Watchpoint expression="p_hash" name="p_hash" radix="-1" linenumber="669" filename="../../../../../components/libraries/bootloader/dfu/nrf_dfu_validation.c"/>
-   <Watchpoint expression="main_file_data" name="main_file_data" radix="-1" linenumber="451" filename="../../../../../components/libraries/bootloader/serial_dfu/nrf_dfu_serial.c"/>
+   <Watchpoint expression="main_file_data" name="main_file_data" radix="-1" linenumber="450" filename="../../../../../components/libraries/bootloader/serial_dfu/nrf_dfu_serial.c"/>
    <Watchpoint expression="m_dfu_settings_buffer" name="m_dfu_settings_buffer" radix="-1" linenumber="236" filename="../../../../../components/libraries/bootloader/dfu/nrf_dfu_settings.c"/>
-   <Watchpoint expression="upgrade_status" name="upgrade_status" radix="-1" linenumber="351" filename="../../../../../components/libraries/bootloader/nrf_bootloader.c"/>
+   <Watchpoint expression="upgrade_status" name="upgrade_status" radix="-1" linenumber="350" filename="../../../../../components/libraries/bootloader/nrf_bootloader.c"/>
    <Watchpoint expression="state" name="state" radix="-1" linenumber="0" filename=""/>
    <Watchpoint expression="is_response_ready" name="is_response_ready" radix="-1" linenumber="0" filename=""/>
   </Watches>
@@ -100,12 +100,12 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="132" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../main.c" selected="0" top="132" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="132" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../main.c" selected="0" top="123" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="25" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../dfu_public_key.c" selected="0" top="9" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="16" y="695" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../components/libraries/mem_manager/mem_manager.c" selected="0" top="663" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="12" y="209" useTextEdit="1" openedFrom="C:/Users/mxuser/Documents/GitHub/nRF52840_BLE_bootloader/nRF5_SDK_17.1.0_ddde560_bootloader/examples/dfu/secure_bootloader/main.c" useBinaryEdit="0" left="0" path="../../../../../components/libraries/bootloader/nrf_bootloader.c" selected="1" top="188" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="31" y="95" useTextEdit="1" openedFrom="C:/Users/mxuser/Documents/GitHub/nRF52840_BLE_bootloader/nRF5_SDK_17.1.0_ddde560_bootloader/examples/dfu/secure_bootloader/main.c" useBinaryEdit="0" left="0" path="../../../../../components/libraries/bootloader/nrf_bootloader.c" selected="0" top="84" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="57" y="514" useTextEdit="1" openedFrom="C:/Users/mxuser/Documents/GitHub/nRF52840_BLE_bootloader/nRF5_SDK_17.1.0_ddde560_bootloader/components/libraries/bootloader/nrf_bootloader.c" useBinaryEdit="0" left="0" path="../../../../../integration/nrfx/legacy/nrf_drv_uart.h" selected="0" top="498" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="141" y="30" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="31" path="secure_bootloader_ble_s140_pca10056.emProject" selected="0" top="9" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="13" y="37" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="61" path="secure_bootloader_ble_s140_pca10056.emProject" selected="0" top="9" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="11" y="46" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../components/drivers_nrf/nrf_soc_nosd/nrf_soc.c" selected="0" top="15" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="12" y="43" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../components/libraries/util/app_util_platform.c" selected="0" top="18" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="12" y="46" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../components/libraries/util/app_error_weak.c" selected="0" top="15" codecName="Default"/>
@@ -127,7 +127,7 @@
   <SessionOpenFile windowGroup="DockEditLeft" x="17" y="55" useTextEdit="1" openedFrom="C:/Users/mxuser/Documents/GitHub/nRF52840_BLE_bootloader/nRF5_SDK_17.1.0_ddde560_bootloader/components/libraries/bootloader/dfu/nrf_dfu_transport.c" useBinaryEdit="0" left="0" path="../../../../../components/libraries/bootloader/dfu/nrf_dfu_transport.h" selected="0" top="42" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="12" y="100" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../components/libraries/bootloader/serial_dfu/nrf_dfu_serial_uart.c" selected="0" top="81" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="29" y="164" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../components/libraries/slip/slip.c" selected="0" top="152" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="16" y="199" useTextEdit="1" openedFrom="C:/Users/mxuser/Documents/GitHub/nRF52840_BLE_bootloader/nRF5_SDK_17.1.0_ddde560_bootloader/components/libraries/bootloader/serial_dfu/nrf_dfu_serial.h" useBinaryEdit="0" left="0" path="../../../../../components/libraries/bootloader/serial_dfu/nrf_dfu_serial.c" selected="0" top="177" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="448" useTextEdit="1" openedFrom="C:/Users/mxuser/Documents/GitHub/nRF52840_BLE_bootloader/nRF5_SDK_17.1.0_ddde560_bootloader/components/libraries/bootloader/serial_dfu/nrf_dfu_serial.h" useBinaryEdit="0" left="0" path="../../../../../components/libraries/bootloader/serial_dfu/nrf_dfu_serial.c" selected="1" top="430" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="30" y="69" useTextEdit="1" openedFrom="C:/Users/mxuser/Documents/GitHub/nRF52840_BLE_bootloader/nRF5_SDK_17.1.0_ddde560_bootloader/components/libraries/bootloader/serial_dfu/nrf_dfu_serial.c" useBinaryEdit="0" left="0" path="../../../../../components/libraries/slip/slip.h" selected="0" top="61" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="975" useTextEdit="1" openedFrom="C:/Users/mxuser/Documents/GitHub/nRF52840_BLE_bootloader/nRF5_SDK_17.1.0_ddde560_bootloader/components/libraries/fstorage/nrf_fstorage_sd.c" useBinaryEdit="0" left="0" path="../../../../../components/softdevice/s140/headers/nrf_soc.h" selected="0" top="959" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="99" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../components/libraries/scheduler/app_scheduler.c" selected="0" top="83" codecName=""/>

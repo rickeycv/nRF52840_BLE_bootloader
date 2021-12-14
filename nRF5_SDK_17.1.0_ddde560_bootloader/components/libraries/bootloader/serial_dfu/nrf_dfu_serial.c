@@ -64,7 +64,6 @@ extern uint8_t error_code;
 extern uint8_t new_fw_file_name[32];
 extern uint8_t old_fw_file_name[32];
 extern uint8_t current_fw_file_name[32];
-extern uint8_t main_file_data[128];
 extern uint8_t upgrade_retries;
 extern bool is_fw_file_open;
 extern bool is_dat_file_open;
@@ -447,9 +446,6 @@ void nrf_dfu_serial_on_packet_received(nrf_dfu_serial_t       * p_transport,
         {
             is_error = false;
             p_str = strstr(p_payload, NEW_FW_TOK);
-
-            memcpy(main_file_data, p_str, main_file_size);
-
 
             get_str_value(p_payload, new_fw_file_name, NEW_FW_TOK, "\r\n");
             get_str_value(p_payload, old_fw_file_name, OLD_FW_TOK, "\r\n");

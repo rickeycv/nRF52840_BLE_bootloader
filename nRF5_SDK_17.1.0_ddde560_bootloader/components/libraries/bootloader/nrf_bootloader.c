@@ -63,15 +63,17 @@
 #include "slip.h"
 
 #define MAIN_FILE_NAME "FOTA.txt"
-#define FRAME_SIZE 128
+#define RX_FRAME_SIZE 128
+#define TX_FRAME_SIZE 128
 #define MAX_COMM_RETRIES   3
+#define FILE_NAME_MAX_LENGTH 32
 
 extern nrf_drv_uart_t m_uart;
 const uint8_t read_file_cmd[] = "AT+QFREAD=%d,%s\r";
 const uint8_t close_file_cmd[] = "AT+QFCLOSE=%d\r";
 const uint8_t connect_str[] = "\r\nCONNECT \r\n";
 const uint8_t ok_str[] = "\r\nOK\r\n";
-uint8_t data_tx[128];
+uint8_t data_tx[TX_FRAME_SIZE];
 uint32_t start_of_data;
 uint8_t len_data_str[5]; //up to 9999
 uint32_t current_frame_size;
@@ -87,13 +89,12 @@ uint32_t dat_file_size;
 
 uint32_t fw_file_size;
 uint8_t error_code = 0;
-uint8_t new_fw_file_name[32];
-uint8_t old_fw_file_name[32];
-uint8_t current_fw_file_name[32];
+uint8_t new_fw_file_name[FILE_NAME_MAX_LENGTH];
+uint8_t old_fw_file_name[FILE_NAME_MAX_LENGTH];
+uint8_t current_fw_file_name[FILE_NAME_MAX_LENGTH];
 bool is_fw_file_open = false;
 bool is_dat_file_open = false;
 bool is_main_file_open = false;
-uint8_t main_file_data[128];
 uint8_t upgrade_retries;
 const uint8_t fota_file_template[] = "Old=%s\r\n" \
                                       "Current=%s\r\n" \
@@ -369,9 +370,9 @@ static void loop_forever(void)
               {
                   is_dat_file_open = true;
                   current_frame_size = dat_file_size -s_dfu_settings.progress.command_offset;
-                  if (current_frame_size > FRAME_SIZE)
+                  if (current_frame_size > RX_FRAME_SIZE)
                   {
-                      current_frame_size = FRAME_SIZE;
+                      current_frame_size = RX_FRAME_SIZE;
                   }
 
                   if(current_frame_size == 0)
@@ -438,10 +439,16 @@ static void loop_forever(void)
                 }
                 else
                 {
-                    //TODO: close files to avoid error at opening the file after reset
-                    //TODO: we need to store the retries value somewhere
-                    NRF_LOG_DEBUG("ERROR while erasing flash!");
-                    dfu_observer(NRF_DFU_EVT_DFU_ABORTED);
+                    // Mark as upgrade failed
+                    upgrade_status = UPGRADE_STATUS_ERROR;
+                    if (is_main_file_open)
+                    {
+                        state = WRITE_UPGRADE_STATUS_SET_POINTER;
+                    }
+                    else
+                    {
+                        state = GET_MAIN_FILE_SIZE;
+                    }
                 }
               }break;
 
@@ -451,9 +458,9 @@ static void loop_forever(void)
 
                 is_fw_file_open = true;
                 current_frame_size = fw_file_size - s_dfu_settings.write_offset;
-                if (current_frame_size > FRAME_SIZE)
+                if (current_frame_size > RX_FRAME_SIZE)
                 {
-                    current_frame_size = FRAME_SIZE;
+                    current_frame_size = RX_FRAME_SIZE;
                 }
 
                 if(current_frame_size == 0)
