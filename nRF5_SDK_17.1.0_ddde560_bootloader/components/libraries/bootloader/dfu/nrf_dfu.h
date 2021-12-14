@@ -63,6 +63,8 @@ extern "C" {
 
 #define NRF_DFU_SCHED_EVENT_DATA_SIZE (sizeof(nrf_dfu_request_t))
 
+#define ENTER_BLE_DFU 0xc2
+
 typedef enum
 {
     DFU_UART_MODE,

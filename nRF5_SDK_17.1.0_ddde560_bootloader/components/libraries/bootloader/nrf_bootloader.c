@@ -63,11 +63,9 @@
 #include "slip.h"
 
 #define MAIN_FILE_NAME "FOTA.txt"
-//#define FILE_NAME "app.bin"
 #define FRAME_SIZE 128
-
-
 #define MAX_COMM_RETRIES   3
+
 extern nrf_drv_uart_t m_uart;
 const uint8_t read_file_cmd[] = "AT+QFREAD=%d,%s\r";
 const uint8_t close_file_cmd[] = "AT+QFCLOSE=%d\r";
@@ -134,6 +132,9 @@ STATIC_ASSERT(NRF_LOG_BACKEND_FLASH_START_PAGE != 0,
     "If nrf_log flash backend is used it cannot use space after code because it would collide with settings page.");
 #endif
 
+/**Function Prototypes**/
+void reset_inactivity_timer(void);
+
 /**@brief Weak implemenation of nrf_dfu_init
  *
  * @note   This function will be overridden if nrf_dfu.c is
@@ -159,7 +160,6 @@ __WEAK uint32_t nrf_dfu_init_user(void)
     return NRF_SUCCESS;
 }
 
-
 static void flash_write_callback(void * p_context)
 {
     UNUSED_PARAMETER(p_context);
@@ -178,6 +178,14 @@ static void do_reset(void * p_context)
     NVIC_SystemReset();
 }
 
+/**@brief Function for entering in BLE DFU mode
+ */
+void launch_ble_dfu(void)
+{
+    s_dfu_settings.dfu_mode = ENTER_BLE_DFU;
+    s_dfu_settings.enter_buttonless_dfu = 1;
+    nrf_dfu_settings_write_and_backup(do_reset);
+}
 
 static void bootloader_reset(bool do_backup)
 {
@@ -194,32 +202,25 @@ static void bootloader_reset(bool do_backup)
     }
 }
 
-
 static void inactivity_timeout(void)
 {
     NRF_LOG_INFO("Inactivity timeout.");
 
     if (dfu_mode == DFU_UART_MODE)
     {
-        nrf_bootloader_dfu_inactivity_timer_restart(
-                            NRF_BOOTLOADER_MS_TO_TICKS(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS),
-                            inactivity_timeout);
+        reset_inactivity_timer();
 
         comm_retries++;
 
         if (comm_retries > MAX_COMM_RETRIES)
         {
-            //TODO: Launch BLE DFU because something is happening with BG77 comm
-            s_dfu_settings.dfu_mode = 0xc2;
-            s_dfu_settings.enter_buttonless_dfu = 1;
-            nrf_dfu_settings_write_and_backup(NULL);
+            // Launch BLE DFU because something is happening with BG77 comm
+            launch_ble_dfu();
             bootloader_reset(false);
         }
         else
         {
-            nrf_bootloader_dfu_inactivity_timer_restart(
-                            NRF_BOOTLOADER_MS_TO_TICKS(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS),
-                            inactivity_timeout);
+            reset_inactivity_timer();
             state = RESET_MODEM;
             is_response_ready = true;
         }
@@ -285,7 +286,6 @@ static void wait_for_event(void)
 #endif
 }
 
-
 /**@brief Continually sleep and process tasks whenever woken.
  */
 static void loop_forever(void)
@@ -303,18 +303,14 @@ static void loop_forever(void)
           {
               case RESET_MODEM:
               {
-                  nrf_bootloader_dfu_inactivity_timer_restart(
-                            NRF_BOOTLOADER_MS_TO_TICKS(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS),
-                            inactivity_timeout);
+                  reset_inactivity_timer();
                   string_size = snprintf(data_tx, sizeof(data_tx), "AT+CFUN=1,1\r");
                   is_response_ready = false;
                   nrf_drv_uart_tx(&m_uart, data_tx, string_size);
               }break;
               case INIT:
               {
-                  nrf_bootloader_dfu_inactivity_timer_restart(
-                            NRF_BOOTLOADER_MS_TO_TICKS(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS),
-                            inactivity_timeout);
+                  reset_inactivity_timer();
                   self_init();
                   nrf_delay_ms(100);
                   string_size = snprintf(data_tx, sizeof(data_tx), "AT\r");
@@ -351,11 +347,6 @@ static void loop_forever(void)
               }break;
               case GET_DAT_FILE_SIZE:
               {
-                  //TODO: remove this is stament, it is only for debug
-                  if (s_dfu_settings.progress.command_offset != 0)
-                  {
-                      s_dfu_settings.progress.command_offset = 0;
-                  }
                   if (upgrade_status == UPGRADE_STATUS_PENDING)
                   {
                       if (new_fw_file_name[0] != NULL)
@@ -389,7 +380,7 @@ static void loop_forever(void)
                   }
                   else
                   {
-
+                       NRF_LOG_INFO("GET_DAT_FILE STATE!**************************************%d, %d", s_dfu_settings.progress.command_offset, current_frame_size);
                        size_len_str = snprintf(len_data_str, sizeof(len_data_str), "%d", current_frame_size);
 
                        // calculate the start of binary data (after "\r\nCONNECT {len_data_str}\r\n")
@@ -408,7 +399,7 @@ static void loop_forever(void)
               {
                   uint32_t addr;
                   uint32_t length;
-                  //TODO: add ret value and check it
+                  
                   ret_code_t ret_val = nrf_dfu_validation_init_cmd_execute(&addr, &length);
                   if (ret_val == NRF_DFU_RES_CODE_SUCCESS)
                   {
@@ -436,9 +427,7 @@ static void loop_forever(void)
               }break;
               case OPEN_FW_FILE:
               {
-                nrf_bootloader_dfu_inactivity_timer_restart(
-                        NRF_BOOTLOADER_MS_TO_TICKS(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS),
-                        inactivity_timeout);
+                reset_inactivity_timer();
                 if (set_app_start_address_and_erase_memory() == NRF_SUCCESS)
                 {
                     force_init_valid();
@@ -450,6 +439,7 @@ static void loop_forever(void)
                 else
                 {
                     //TODO: close files to avoid error at opening the file after reset
+                    //TODO: we need to store the retries value somewhere
                     NRF_LOG_DEBUG("ERROR while erasing flash!");
                     dfu_observer(NRF_DFU_EVT_DFU_ABORTED);
                 }
@@ -457,9 +447,7 @@ static void loop_forever(void)
 
               case WRITE:
               {
-                nrf_bootloader_dfu_inactivity_timer_restart(
-                        NRF_BOOTLOADER_MS_TO_TICKS(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS),
-                        inactivity_timeout);
+                reset_inactivity_timer();
 
                 is_fw_file_open = true;
                 current_frame_size = fw_file_size - s_dfu_settings.write_offset;
@@ -492,9 +480,7 @@ static void loop_forever(void)
               }break;
               case CLOSE_MAIN_FILE:
               {
-                  nrf_bootloader_dfu_inactivity_timer_restart(
-                            NRF_BOOTLOADER_MS_TO_TICKS(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS),
-                            inactivity_timeout);
+                  reset_inactivity_timer();
                   if (is_main_file_open)
                   {
                       string_size = snprintf(data_tx, sizeof(data_tx), close_file_cmd, main_file_handle);
@@ -508,9 +494,7 @@ static void loop_forever(void)
               }break;
               case CLOSE_DAT_FILE:
               {
-                  nrf_bootloader_dfu_inactivity_timer_restart(
-                            NRF_BOOTLOADER_MS_TO_TICKS(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS),
-                            inactivity_timeout);
+                  reset_inactivity_timer();
                   if (is_dat_file_open)
                   {
                       string_size = snprintf(data_tx, sizeof(data_tx), close_file_cmd, dat_file_handle);
@@ -524,9 +508,7 @@ static void loop_forever(void)
               }break;
               case CLOSE_FW_FILE:
               {
-                  nrf_bootloader_dfu_inactivity_timer_restart(
-                        NRF_BOOTLOADER_MS_TO_TICKS(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS),
-                        inactivity_timeout);
+                  reset_inactivity_timer();
                   if (is_fw_file_open)
                   {
                       string_size = snprintf(data_tx, sizeof(data_tx), close_file_cmd, fw_file_handle);
@@ -546,7 +528,7 @@ static void loop_forever(void)
                   {
                       NRF_LOG_WARNING("Upgrade retries limit reached\n")
                       upgrade_status = UPGRADE_STATUS_ERROR;
-                      //Prepare FOTA.txt file and write failed on status
+                      //Prepare FOTA.txt file and write failed on Upgrade status field
                       if (is_main_file_open)
                       {
                           state = WRITE_UPGRADE_STATUS_SET_POINTER;
@@ -572,11 +554,15 @@ static void loop_forever(void)
                   }
                   else
                   {
-                      //TODO: Main file not open, probably is no present
-                      // Launch BLE DFU
-                      //TODO: this must be added when BLE DFU and UART DFU are combined.
-                      // For now we will reset the modem
+                      // We should not get here, if so, try again or launch BLE DFU
                       state = RESET_MODEM;
+                      comm_retries++;
+                      if (comm_retries >= MAX_COMM_RETRIES)
+                      {
+                          // Launch BLE DFU because something is happening with BG77 comm
+                          launch_ble_dfu();
+                          bootloader_reset(false);
+                      }
                   }
               }break;
               case WRITE_UPGRADE_STATUS_TRUNCATE_FILE:
@@ -615,16 +601,11 @@ static void loop_forever(void)
               }break;
               case START_APP:
               {
-                  nrf_bootloader_dfu_inactivity_timer_restart(
-                            NRF_BOOTLOADER_MS_TO_TICKS(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS),
-                            inactivity_timeout);
-                  //TODO: something went wrong, launch BLE DFU or main app if any
+                  reset_inactivity_timer();
+                  // Something went wrong, launch BLE DFU or main app if any
                   if (upgrade_status == UPGRADE_STATUS_ERROR)
                   {
-                      s_dfu_settings.dfu_mode = 0xc2;
-                      s_dfu_settings.enter_buttonless_dfu = 1;
-                      nrf_dfu_settings_write_and_backup(do_reset);
-                      //bootloader_reset(false);
+                      launch_ble_dfu();
                   }
                   else if (upgrade_status == UPGRADE_STATUS_SUCCESS)
                   {           
@@ -633,12 +614,10 @@ static void loop_forever(void)
                       p_init.type = DFU_FW_TYPE_APPLICATION;
                       if (on_data_obj_execute_request((nrf_dfu_request_t*)&dummy, (nrf_dfu_response_t*)&dummy))
                       {
-                          // we should not get here, something went wrong
+                          // We should not get here, something went wrong
                           state = UPGRADE_FAILED;
                           upgrade_status = UPGRADE_STATUS_PENDING;
-                          nrf_bootloader_dfu_inactivity_timer_restart(
-                                    NRF_BOOTLOADER_MS_TO_TICKS(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS),
-                                    inactivity_timeout);
+                          reset_inactivity_timer();
                       }
                       
                   }
@@ -882,7 +861,7 @@ ret_code_t nrf_bootloader_init(nrf_dfu_observer_t observer)
         return NRF_ERROR_INTERNAL;
     }
 
-    if (s_dfu_settings.dfu_mode == 0xc2)
+    if (s_dfu_settings.dfu_mode == ENTER_BLE_DFU)
     {
         is_response_ready = false;
         dfu_mode = DFU_BLE_MODE;  
@@ -925,7 +904,7 @@ ret_code_t nrf_bootloader_init(nrf_dfu_observer_t observer)
                 // if the app was upgraded via BLE return to default (UART)
                 if (dfu_mode == DFU_BLE_MODE)
                 {
-                    s_dfu_settings.dfu_mode = 0x2c;
+                    s_dfu_settings.dfu_mode = 0xff;
                     // Clear DFU flag in flash settings.
                     s_dfu_settings.enter_buttonless_dfu = 0;
                     nrf_dfu_settings_write_and_backup(NULL);
@@ -942,7 +921,7 @@ ret_code_t nrf_bootloader_init(nrf_dfu_observer_t observer)
 
     if (dfu_mode == DFU_BLE_MODE)
     {
-        // Original BL tiemout is 120 s (5*24 = 120)
+        // Original BL timeout is 120 s (5*24 = 120)
         initial_timeout *= 24; 
     }
 
@@ -991,4 +970,13 @@ ret_code_t nrf_bootloader_init(nrf_dfu_observer_t observer)
 
     // Should not be reached.
     return NRF_ERROR_INTERNAL;
+}
+
+/**@brief Function wrapper
+ */
+void reset_inactivity_timer(void)
+{
+    nrf_bootloader_dfu_inactivity_timer_restart(
+                            NRF_BOOTLOADER_MS_TO_TICKS(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS),
+                            inactivity_timeout);
 }

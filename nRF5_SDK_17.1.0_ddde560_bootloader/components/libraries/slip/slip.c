@@ -127,7 +127,7 @@ ret_code_t slip_decode_add_byte(slip_t * p_slip, uint8_t c)
                             do
                             {
                                 p_str = strstr(p_str, substr);
-                                if (p_str != NULL/* && (p_str + strlen(substr) - p_slip->p_buffer) <= p_slip->current_index*/)
+                                if (p_str != NULL)
                                 {
                                     return NRF_SUCCESS;
                                 }
@@ -147,14 +147,14 @@ ret_code_t slip_decode_add_byte(slip_t * p_slip, uint8_t c)
                             do
                             {
                                 p_str = strstr(p_str, substr);
-                                if (p_str != NULL/* && (p_str + strlen(substr) - p_slip->p_buffer) <= p_slip->current_index*/)
+                                if (p_str != NULL)
                                 {
                                     cont_ocurrences++;
                                     p_str += strlen(substr);
                                 }
                             }while(p_str != NULL);
                             
-                            //TODO: need to add something to detect error because it has only 2 pairs of \r\n
+                            // If number of ocurrences is not met, timeout will occur
                             if (cont_ocurrences == 4)
                             {
                                 return NRF_SUCCESS;
@@ -186,14 +186,14 @@ ret_code_t slip_decode_add_byte(slip_t * p_slip, uint8_t c)
                             do
                             {
                                 p_str = strstr(p_str, substr);
-                                if (p_str != NULL/* && (p_str + strlen(substr) - p_slip->p_buffer) <= p_slip->current_index*/)
+                                if (p_str != NULL)
                                 {
                                     cont_ocurrences++;
                                     p_str += strlen(substr);
                                 }
                             }while(p_str != NULL);
                             
-                            //TODO: need to add something to detect error because it has only 2 pairs of \r\n
+                            // If number of ocurrences is not met, timeout will occur
                             if (cont_ocurrences == 2)
                             {
                                 return NRF_SUCCESS;
@@ -208,14 +208,14 @@ ret_code_t slip_decode_add_byte(slip_t * p_slip, uint8_t c)
                             do
                             {
                                 p_str = strstr(p_str, substr);
-                                if (p_str != NULL/* && (p_str + strlen(substr) - p_slip->p_buffer) <= p_slip->current_index*/)
+                                if (p_str != NULL)
                                 {
                                     cont_ocurrences++;
                                     p_str += strlen(substr);
                                 }
                             }while(p_str != NULL);
                             
-                            //TODO: need to add something to detect error because it has only 2 pairs of \r\n
+                            // If number of ocurrences is not met, timeout will occur
                             if (cont_ocurrences == 3)
                             {
                                 return NRF_SUCCESS;

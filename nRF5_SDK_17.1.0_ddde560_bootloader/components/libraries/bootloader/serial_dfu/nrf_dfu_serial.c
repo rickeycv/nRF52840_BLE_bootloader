@@ -500,8 +500,11 @@ void nrf_dfu_serial_on_packet_received(nrf_dfu_serial_t       * p_transport,
             request.write.p_data   = p_payload;
             request.write.len      = payload_len;
             request.callback.write = p_transport->payload_free_func;
+            
+            NRF_LOG_INFO("dat file info received*****************");
+            NRF_LOG_HEXDUMP_DEBUG(p_payload, payload_len);
 
-            is_response_ready = true;
+            //is_response_ready = true;
         }break;
         case GET_DAT_FILE_SIZE:
         case GET_FILE_SIZE:
