@@ -503,8 +503,6 @@ void nrf_dfu_serial_on_packet_received(nrf_dfu_serial_t       * p_transport,
             
             NRF_LOG_INFO("dat file info received*****************");
             NRF_LOG_HEXDUMP_DEBUG(p_payload, payload_len);
-
-            //is_response_ready = true;
         }break;
         case GET_DAT_FILE_SIZE:
         case GET_FILE_SIZE:
