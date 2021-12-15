@@ -63,6 +63,9 @@ extern "C" {
 
 #define NRF_DFU_SCHED_EVENT_DATA_SIZE (sizeof(nrf_dfu_request_t))
 
+#define RX_FRAME_SIZE 1024
+#define TX_FRAME_SIZE 128
+
 #define ENTER_BLE_DFU 0xc2
 
 typedef enum

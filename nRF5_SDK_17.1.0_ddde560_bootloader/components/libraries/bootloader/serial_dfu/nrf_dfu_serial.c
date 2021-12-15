@@ -45,6 +45,7 @@
 
 #include "slip.h"
 #include <stdlib.h>
+#include "nrf_bootloader.h"
 
 #define NRF_LOG_MODULE_NAME nrf_dfu_serial
 #include "nrf_log.h"
@@ -61,9 +62,9 @@ extern uint32_t fw_file_size;
 extern uint8_t dat_file_handle;
 extern uint32_t dat_file_size;
 extern uint8_t error_code;
-extern uint8_t new_fw_file_name[32];
-extern uint8_t old_fw_file_name[32];
-extern uint8_t current_fw_file_name[32];
+extern uint8_t new_fw_file_name[FILE_NAME_MAX_LENGTH];
+extern uint8_t old_fw_file_name[FILE_NAME_MAX_LENGTH];
+extern uint8_t current_fw_file_name[FILE_NAME_MAX_LENGTH];
 extern uint8_t upgrade_retries;
 extern bool is_fw_file_open;
 extern bool is_dat_file_open;
@@ -365,6 +366,10 @@ void nrf_dfu_serial_on_packet_received(nrf_dfu_serial_t       * p_transport,
                     if (!is_error)
                     {
                         main_file_size = atoi(tokens[2]);
+                        if (main_file_size > RX_FRAME_SIZE)
+                        {
+                            is_error = true;
+                        }
                     }
                     else
                     {

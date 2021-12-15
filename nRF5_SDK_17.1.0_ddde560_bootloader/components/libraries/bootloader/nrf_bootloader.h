@@ -55,6 +55,11 @@
 
 #include <stdint.h>
 #include "nrf_dfu.h"
+
+#define MAIN_FILE_NAME "FOTA.txt"
+#define MAX_COMM_RETRIES   3
+#define FILE_NAME_MAX_LENGTH 32
+
 #ifdef __cplusplus
 extern "C" {
 #endif

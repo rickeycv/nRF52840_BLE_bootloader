@@ -154,7 +154,7 @@ ret_code_t slip_decode_add_byte(slip_t * p_slip, uint8_t c)
                                 }
                             }while(p_str != NULL);
                             
-                            // If number of ocurrences is not met, timeout will occur
+                            // If number of ocurrences are not met, timeout will occur
                             if (cont_ocurrences == 4)
                             {
                                 return NRF_SUCCESS;
@@ -193,7 +193,7 @@ ret_code_t slip_decode_add_byte(slip_t * p_slip, uint8_t c)
                                 }
                             }while(p_str != NULL);
                             
-                            // If number of ocurrences is not met, timeout will occur
+                            // If number of ocurrences are not met, timeout will occur
                             if (cont_ocurrences == 2)
                             {
                                 return NRF_SUCCESS;
@@ -215,7 +215,7 @@ ret_code_t slip_decode_add_byte(slip_t * p_slip, uint8_t c)
                                 }
                             }while(p_str != NULL);
                             
-                            // If number of ocurrences is not met, timeout will occur
+                            // If number of ocurrences are not met, timeout will occur
                             if (cont_ocurrences == 3)
                             {
                                 return NRF_SUCCESS;

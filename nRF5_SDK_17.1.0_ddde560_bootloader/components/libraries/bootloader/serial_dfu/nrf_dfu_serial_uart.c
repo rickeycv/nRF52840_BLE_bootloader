@@ -63,7 +63,7 @@ NRF_LOG_MODULE_REGISTER();
 
 #define NRF_SERIAL_OPCODE_SIZE          (sizeof(uint8_t))
 #define NRF_UART_MAX_RESPONSE_SIZE_SLIP (2 * NRF_SERIAL_MAX_RESPONSE_SIZE + 1)
-#define RX_BUF_SIZE                     (256) //to get 64bytes payload
+#define RX_BUF_SIZE                     (RX_FRAME_SIZE) //to get 64bytes payload
 #define OPCODE_OFFSET                   (sizeof(uint32_t) - NRF_SERIAL_OPCODE_SIZE)
 #define DATA_OFFSET                     (OPCODE_OFFSET + NRF_SERIAL_OPCODE_SIZE)
 #define UART_SLIP_MTU                   (2 * (RX_BUF_SIZE + 1) + 1)

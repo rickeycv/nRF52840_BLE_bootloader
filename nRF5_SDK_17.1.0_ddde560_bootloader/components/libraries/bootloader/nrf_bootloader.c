@@ -62,12 +62,6 @@
 
 #include "slip.h"
 
-#define MAIN_FILE_NAME "FOTA.txt"
-#define RX_FRAME_SIZE 128
-#define TX_FRAME_SIZE 128
-#define MAX_COMM_RETRIES   3
-#define FILE_NAME_MAX_LENGTH 32
-
 extern nrf_drv_uart_t m_uart;
 const uint8_t read_file_cmd[] = "AT+QFREAD=%d,%s\r";
 const uint8_t close_file_cmd[] = "AT+QFCLOSE=%d\r";
@@ -542,7 +536,7 @@ static void loop_forever(void)
                       }
                       else
                       {
-                          state = GET_MAIN_FILE_SIZE;
+                          launch_ble_dfu();
                       }
                   }
                   else
