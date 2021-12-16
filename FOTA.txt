@@ -1,0 +1,5 @@
+Old=app0
+Current=ble_app_blinky_pca10056_s140
+New=ble_app_uart_s140_full_flash
+Upgrade Retries=2
+Status=Pending
