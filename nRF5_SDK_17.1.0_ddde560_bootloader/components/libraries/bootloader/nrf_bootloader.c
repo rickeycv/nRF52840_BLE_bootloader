@@ -128,7 +128,7 @@ STATIC_ASSERT(NRF_LOG_BACKEND_FLASH_START_PAGE != 0,
 #endif
 
 /**Function Prototypes**/
-void reset_inactivity_timer(void);
+void reset_inactivity_timer(uint32_t timeout_ms);
 
 /**@brief Weak implemenation of nrf_dfu_init
  *
@@ -203,7 +203,7 @@ static void inactivity_timeout(void)
 
     if (dfu_mode == DFU_UART_MODE)
     {
-        reset_inactivity_timer();
+        reset_inactivity_timer(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS);
 
         comm_retries++;
 
@@ -215,7 +215,7 @@ static void inactivity_timeout(void)
         }
         else
         {
-            reset_inactivity_timer();
+            reset_inactivity_timer(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS);
             state = RESET_MODEM;
             is_response_ready = true;
         }
@@ -298,14 +298,14 @@ static void loop_forever(void)
           {
               case RESET_MODEM:
               {
-                  reset_inactivity_timer();
+                  reset_inactivity_timer(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS);
                   string_size = snprintf(data_tx, sizeof(data_tx), "AT+CFUN=1,1\r");
                   is_response_ready = false;
                   nrf_drv_uart_tx(&m_uart, data_tx, string_size);
               }break;
               case INIT:
               {
-                  reset_inactivity_timer();
+                  reset_inactivity_timer(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS);
                   self_init();
                   nrf_delay_ms(100);
                   string_size = snprintf(data_tx, sizeof(data_tx), "AT\r");
@@ -422,7 +422,7 @@ static void loop_forever(void)
               }break;
               case OPEN_FW_FILE:
               {
-                reset_inactivity_timer();
+                reset_inactivity_timer(NRF_BL_DFU_ERASE_INACTIVITY_TIMEOUT_MS);
                 if (set_app_start_address_and_erase_memory() == NRF_SUCCESS)
                 {
                     force_init_valid();
@@ -448,7 +448,7 @@ static void loop_forever(void)
 
               case WRITE:
               {
-                reset_inactivity_timer();
+                reset_inactivity_timer(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS);
 
                 is_fw_file_open = true;
                 current_frame_size = fw_file_size - s_dfu_settings.write_offset;
@@ -481,7 +481,7 @@ static void loop_forever(void)
               }break;
               case CLOSE_MAIN_FILE:
               {
-                  reset_inactivity_timer();
+                  reset_inactivity_timer(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS);
                   if (is_main_file_open)
                   {
                       string_size = snprintf(data_tx, sizeof(data_tx), close_file_cmd, main_file_handle);
@@ -495,7 +495,7 @@ static void loop_forever(void)
               }break;
               case CLOSE_DAT_FILE:
               {
-                  reset_inactivity_timer();
+                  reset_inactivity_timer(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS);
                   if (is_dat_file_open)
                   {
                       string_size = snprintf(data_tx, sizeof(data_tx), close_file_cmd, dat_file_handle);
@@ -509,7 +509,7 @@ static void loop_forever(void)
               }break;
               case CLOSE_FW_FILE:
               {
-                  reset_inactivity_timer();
+                  reset_inactivity_timer(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS);
                   if (is_fw_file_open)
                   {
                       string_size = snprintf(data_tx, sizeof(data_tx), close_file_cmd, fw_file_handle);
@@ -602,7 +602,7 @@ static void loop_forever(void)
               }break;
               case START_APP:
               {
-                  reset_inactivity_timer();
+                  reset_inactivity_timer(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS);
                   // Something went wrong, launch BLE DFU or main app if any
                   if (upgrade_status == UPGRADE_STATUS_ERROR)
                   {
@@ -618,7 +618,7 @@ static void loop_forever(void)
                           // We should not get here, something went wrong
                           state = UPGRADE_FAILED;
                           upgrade_status = UPGRADE_STATUS_PENDING;
-                          reset_inactivity_timer();
+                          reset_inactivity_timer(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS);
                       }
                       
                   }
@@ -975,9 +975,18 @@ ret_code_t nrf_bootloader_init(nrf_dfu_observer_t observer)
 
 /**@brief Function wrapper
  */
-void reset_inactivity_timer(void)
+void reset_inactivity_timer(uint32_t timeout_ms)
 {
-    nrf_bootloader_dfu_inactivity_timer_restart(
+    if (timeout_ms == 0 || timeout_ms > 99 && timeout_ms <= 60000000 )
+    {
+        nrf_bootloader_dfu_inactivity_timer_restart(
+                            NRF_BOOTLOADER_MS_TO_TICKS(timeout_ms),
+                            inactivity_timeout);
+    }
+    else //invalid, set default
+    {
+        nrf_bootloader_dfu_inactivity_timer_restart(
                             NRF_BOOTLOADER_MS_TO_TICKS(NRF_BL_DFU_INACTIVITY_TIMEOUT_MS),
                             inactivity_timeout);
+    }
 }

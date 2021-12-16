@@ -1,9 +1,17 @@
 # nRF52840_Quectel_bootloader
 ## Solution's path
 nRF5_SDK_17.1.0_ddde560_bootloader\examples\dfu\secure_bootloader\pca10056_s140_ble\ses
-## Characteristics
-RX buffer is 1024 bytes long
-.bin and .dat file name must be 32 bytes long max (including null character, extension no needed)
+## Features
+- RX frame is 1024 bytes long
+- .bin and .dat file name must be 32 bytes long max (including null character, extension no needed)
+- Max .bin file size is 778240 bytes (10 minutes avg. via BG77)
+- FLASH memory layout
+-- MBR                 0x00000000 - 0x00000fff
+-- SoftDevice          0x00001000 - 0x00026fff
+-- Main app            0x00027000 - 0x000e4fff
+-- App data            0x000e5000 - 0x000e7fff
+-- Bootloader          0x000e8000 - 0x000fdfff
+-- Bootloader settings 0x000fe000 - 0x000fffff
 ## Instructions
 - **FW test files** folder includes the FW test files I have been using.
 - FOTA.txt includes FW test files names.
@@ -11,4 +19,3 @@ RX buffer is 1024 bytes long
 'e' plus enter (this can be done in the SerialPortBridge app, pressing the **Enter DFU** button).
 ## Next steps
 - Check for missing error paths.
-- Delete project files of adiionals IDEs. 

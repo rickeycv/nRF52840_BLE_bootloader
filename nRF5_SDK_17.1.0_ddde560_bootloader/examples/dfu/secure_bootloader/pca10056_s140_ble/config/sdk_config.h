@@ -206,6 +206,10 @@
 #define NRF_BL_DFU_INACTIVITY_TIMEOUT_MS 5000
 #endif
 
+#ifndef NRF_BL_DFU_ERASE_INACTIVITY_TIMEOUT_MS
+#define NRF_BL_DFU_ERASE_INACTIVITY_TIMEOUT_MS 24000
+#endif
+
 // </h> 
 //==========================================================
 
