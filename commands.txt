@@ -1,0 +1,17 @@
+nrfutil pkg generate --application ble_app_uartfullflashnodat.hex --sd-req "0x100" --application-version 10000 --hw-version 52 ble_app_uartfullflashnodat.zip --key-file private.pem
+Zip created at ble_app_uartfullflashnodat.zip
+
+C:\Users\mxuser>nrfjprog --family nRF52 --eraseall
+
+
+
+AT+QFDEL="FOTA.txt"
+AT+QFUPL="FOTA.txt",113
+
+AT+QFUPL="ble_app_uartfullflashnodat.dat",142
+AT+QFUPL="ble_app_uartfullflashnodat.dat",790528
+AT+QFUPL="ble_app_uart_s140_full_flash.bin",778240
+AT+QFUPL="ble_app_uart_s140_full_flash.dat",142
+AT+QFUPL="ble_app_uart_s140_full_flash.bin",790528
+AT+QFUPL="ble_app_uart_s140_full_flash.bin",827392
+AT+QFUPL="ble_app_uart_s140_full_flash.bin",880640
