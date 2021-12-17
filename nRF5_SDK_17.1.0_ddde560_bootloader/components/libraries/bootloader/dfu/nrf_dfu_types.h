@@ -141,7 +141,7 @@ STATIC_ASSERT((NRF_DFU_APP_DATA_AREA_SIZE % CODE_PAGE_SIZE) == 0, "NRF_DFU_APP_D
 
 /** @brief Total size of the region between the SoftDevice and the bootloader.
  */
-#define DFU_REGION_END(bootloader_start_addr) ((bootloader_start_addr) - (NRF_DFU_APP_DATA_AREA_SIZE))
+#define DFU_REGION_END(bootloader_start_addr) ((bootloader_start_addr)/* - (NRF_DFU_APP_DATA_AREA_SIZE)*/)
 
 #if defined(BLE_STACK_SUPPORT_REQD) || defined(ANT_STACK_SUPPORT_REQD)
 #define DFU_REGION_START                    (nrf_dfu_bank0_start_addr())
